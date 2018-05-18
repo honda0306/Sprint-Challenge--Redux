@@ -1,31 +1,26 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
-import Smurfs from './Smurfs';
+import Smurf from './Smurf';
 import SmurfForm from './SmurfForm';
-import { getSmurfs } from '../actions';
+import { fetchSmurfs } from '../actions';
 import { connect } from 'react-redux';
 import './App.css';
 
 
 class App extends Component {
   componentDidMount() {
-    this.props.getSmurfs();
+    this.props.fetchSmurfs();
   }
+
   render() {
     return (
       <div className="App">
-        {/* <h1>SMURFS! 2.0 W/ Redux</h1>
+        <h1>SMURFS! 2.0 W/ Redux</h1>
         <div>Welcome to your Redux version of Smurfs!</div>
-        <div>Start inside of your `src/index.js` file!</div>
-        <div>Have fun!</div> */}
         <SmurfForm />
-        {this.props.error ? <h4>Error Fetching Smurfs</h4> : null }
-        {/* {this.componentWillReceiveProps.gettingSmurfs ? (
-          <img src={logo} className="App-logo" alt="logo" />
-        ) : (
-          <Smurfs smurfs={this.props.smurfs} />
-        )} */}
-        <Smurfs smurfs={this.props.smurfs} />
+          {this.props.smurfs.map(smurf => {
+            return <Smurf smurf={smurf} key={smurf.id} />;
+          })}; 
       </div>
     );
   }
@@ -34,10 +29,9 @@ class App extends Component {
 const mapStateToProps = state => {
   const { smurfReducer } = state;
   return {
-    smurfs: smurfReducer.smurfs,
-    error: smurfReducer.error,
-    gettingSmurfs: smurfReducer.gettingSmurfs
+    fetchSmurfs: state.fetchingSmurfs,
+    smurfs: state.smurfs
   };
 };
 
-export default connect(mapStateToProps, { getSmurfs })(App);
+export default connect(mapStateToProps, { fetchSmurfs })(App);
